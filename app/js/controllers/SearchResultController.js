@@ -25,12 +25,12 @@ angular.module('juiceShop').controller('SearchResultController', [
 
     $scope.addToBasket = function (id) {
       basketService.find($window.sessionStorage.bid).then(function (basket) {
-        var productsInBasket = basket.products
+        var productsInBasket = basket.Products
         var found = false
         for (var i = 0; i < productsInBasket.length; i++) {
           if (productsInBasket[i].id === id) {
             found = true
-            basketService.get(productsInBasket[i].basketItem.id).then(function (existingBasketItem) {
+            basketService.get(productsInBasket[i].BasketItem.id).then(function (existingBasketItem) {
               var newQuantity = existingBasketItem.quantity + 1
               basketService.put(existingBasketItem.id, {quantity: newQuantity}).then(function (updatedBasketItem) {
                 productService.get(updatedBasketItem.ProductId).then(function (product) {
@@ -38,7 +38,7 @@ angular.module('juiceShop').controller('SearchResultController', [
                     $scope.confirmation = basketAddSameProduct
                   }, function (translationId) {
                     $scope.confirmation = translationId
-                  })
+                  }).catch(angular.noop)
                 }).catch(function (err) {
                   console.log(err)
                 })
@@ -58,7 +58,7 @@ angular.module('juiceShop').controller('SearchResultController', [
                 $scope.confirmation = basketAddProduct
               }, function (translationId) {
                 $scope.confirmation = translationId
-              })
+              }).catch(angular.noop)
             }).catch(function (err) {
               console.log(err)
             })
@@ -76,7 +76,7 @@ angular.module('juiceShop').controller('SearchResultController', [
     productService.search($scope.searchQuery).then(function (products) {
       $scope.products = products
       for (var i = 0; i < $scope.products.length; i++) {
-        $scope.products[i].description = $sce.trustAsHtml($scope.products[i].description)
+        $scope.products[i].description = $sce.trustAsHtml($scope.products[i].description) // lgtm [js/xss]
       }
     }).catch(function (err) {
       console.log(err)

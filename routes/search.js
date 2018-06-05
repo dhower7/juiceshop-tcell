@@ -1,25 +1,24 @@
-'use strict'
+const utils = require('../lib/utils')
+const models = require('../models/index')
+const challenges = require('../data/datacache').challenges
 
-var utils = require('../lib/utils')
-var models = require('../models/index')
-var challenges = require('../data/datacache').challenges
-
-exports = module.exports = function searchProducts () {
-  return function (req, res, next) {
-    var criteria = req.query.q === 'undefined' ? '' : req.query.q || ''
-    if (utils.notSolved(challenges.localXssChallenge) && utils.contains(criteria, '<script>alert("XSS1")</script>')) {
+module.exports = function searchProducts () {
+  return ({query}, res, next) => {
+    let criteria = query.q === 'undefined' ? '' : query.q || ''
+    criteria = (criteria.length <= 200) ? criteria : criteria.substring(0, 200)
+    if (utils.notSolved(challenges.localXssChallenge) && utils.contains(criteria, '<script>alert("XSS")</script>')) {
       utils.solve(challenges.localXssChallenge)
     }
     models.sequelize.query('SELECT * FROM Products WHERE ((name LIKE \'%' + criteria + '%\' OR description LIKE \'%' + criteria + '%\') AND deletedAt IS NULL) ORDER BY name')
-      .success(function (products) {
+      .then(([products, query]) => {
         if (utils.notSolved(challenges.unionSqlInjectionChallenge)) {
-          var dataString = JSON.stringify(products)
-          var solved = true
-          models.User.findAll().success(function (data) {
-            var users = utils.queryResultToJson(data)
+          const dataString = JSON.stringify(products)
+          let solved = true
+          models.User.findAll().then(data => {
+            const users = utils.queryResultToJson(data)
             if (users.data && users.data.length) {
-              for (var i = 0; i < users.data.length; i++) {
-                solved = solved && utils.containsOrEscaped(dataString, users.data[ i ].email) && utils.contains(dataString, users.data[ i ].password)
+              for (let i = 0; i < users.data.length; i++) {
+                solved = solved && utils.containsOrEscaped(dataString, users.data[i].email) && utils.contains(dataString, users.data[i].password)
                 if (!solved) {
                   break
                 }
@@ -31,7 +30,7 @@ exports = module.exports = function searchProducts () {
           })
         }
         res.json(utils.queryResultToJson(products))
-      }).error(function (error) {
+      }).catch(error => {
         next(error)
       })
   }

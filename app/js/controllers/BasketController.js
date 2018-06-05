@@ -12,14 +12,22 @@ angular.module('juiceShop').controller('BasketController', [
 
     userService.whoAmI().then(function (data) {
       $scope.userEmail = data.email || 'anonymous'
-    })
+    }).catch(angular.noop)
 
-    $scope.couponCollapsed = true
-    $scope.paymentCollapsed = true
+    $scope.couponPanelExpanded = $window.localStorage.couponPanelExpanded ? JSON.parse($window.localStorage.couponPanelExpanded) : false
+    $scope.paymentPanelExpanded = $window.localStorage.paymentPanelExpanded ? JSON.parse($window.localStorage.paymentPanelExpanded) : false
+
+    $scope.toggleCoupon = function () {
+      $window.localStorage.couponPanelExpanded = JSON.stringify($scope.couponPanelExpanded)
+    }
+
+    $scope.togglePayment = function () {
+      $window.localStorage.paymentPanelExpanded = JSON.stringify($scope.paymentPanelExpanded)
+    }
 
     function load () {
       basketService.find($window.sessionStorage.bid).then(function (basket) {
-        $scope.products = basket.products
+        $scope.products = basket.Products
         for (var i = 0; i < $scope.products.length; i++) {
           $scope.products[i].description = $sce.trustAsHtml($scope.products[i].description)
         }
@@ -44,13 +52,13 @@ angular.module('juiceShop').controller('BasketController', [
           $scope.confirmation = discountApplied
         }, function (translationId) {
           $scope.confirmation = translationId
-        })
+        }).catch(angular.noop)
         $scope.error = undefined
         $scope.form.$setPristine()
       }).catch(function (error) {
         console.log(error)
         $scope.confirmation = undefined
-        $scope.error = error // Intentionally not translated to indicate that the error just passed through from backend
+        $scope.error = error
         $scope.form.$setPristine()
       })
     }
@@ -126,14 +134,20 @@ angular.module('juiceShop').controller('BasketController', [
       })
     }
 
-    $scope.twitterUrl = 'https://twitter.com/owasp_juiceshop'
-    $scope.facebookUrl = 'https://www.facebook.com/owasp.juiceshop'
+    $scope.twitterUrl = null
+    $scope.facebookUrl = null
+    $scope.applicationName = 'OWASP Juice Shop'
     configurationService.getApplicationConfiguration().then(function (config) {
-      if (config && config.application && config.application.twitterUrl !== null) {
-        $scope.twitterUrl = config.application.twitterUrl
-      }
-      if (config && config.application && config.application.facebookUrl !== null) {
-        $scope.facebookUrl = config.application.facebookUrl
+      if (config && config.application) {
+        if (config.application.twitterUrl !== null) {
+          $scope.twitterUrl = config.application.twitterUrl
+        }
+        if (config.application.facebookUrl !== null) {
+          $scope.facebookUrl = config.application.facebookUrl
+        }
+        if (config.application.name !== null) {
+          $scope.applicationName = config.application.name
+        }
       }
     }).catch(function (err) {
       console.log(err)

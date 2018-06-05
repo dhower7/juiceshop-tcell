@@ -1,9 +1,10 @@
-'use strict'
+const utils = require('../lib/utils')
+const config = require('config')
 
-var utils = require('../lib/utils')
-
-exports = module.exports = function retrieveAppVersion () {
-  return function (req, res) {
-    res.json({ version: utils.version() })
+module.exports = function retrieveAppVersion () {
+  return (req, res) => {
+    res.json({
+      version: config.get('application.showVersionNumber') ? utils.version() : ''
+    })
   }
 }

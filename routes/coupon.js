@@ -1,29 +1,27 @@
-'use strict'
+const insecurity = require('../lib/insecurity')
+const models = require('../models/index')
 
-var insecurity = require('../lib/insecurity')
-var models = require('../models/index')
-
-exports = module.exports = function applyCoupon () {
-  return function (req, res, next) {
-    var id = req.params.id
-    var coupon = req.params.coupon ? decodeURIComponent(req.params.coupon) : undefined
-    var discount = insecurity.discountFromCoupon(coupon)
+module.exports = function applyCoupon () {
+  return ({params}, res, next) => {
+    const id = params.id
+    let coupon = params.coupon ? decodeURIComponent(params.coupon) : undefined
+    const discount = insecurity.discountFromCoupon(coupon)
     coupon = discount ? coupon : null
-    models.Basket.find(id).success(function (basket) {
+    models.Basket.findById(id).then(basket => {
       if (basket) {
-        basket.updateAttributes({ coupon: coupon }).success(function () {
+        basket.updateAttributes({ coupon }).then(() => {
           if (discount) {
-            res.json({ discount: discount })
+            res.json({ discount })
           } else {
             res.status(404).send('Invalid coupon.')
           }
-        }).error(function (error) {
+        }).catch(error => {
           next(error)
         })
       } else {
         next(new Error('Basket with id=' + id + ' does not exist.'))
       }
-    }).error(function (error) {
+    }).catch(error => {
       next(error)
     })
   }

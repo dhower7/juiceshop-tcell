@@ -1,13 +1,14 @@
-'use strict'
+const utils = require('../lib/utils')
+const insecurity = require('../lib/insecurity')
+const challenges = require('../data/datacache').challenges
 
-var utils = require('../lib/utils')
-var insecurity = require('../lib/insecurity')
-var challenges = require('../data/datacache').challenges
-
-exports = module.exports = function performRedirect () {
-  return function (req, res, next) {
-    var toUrl = req.query.to
+module.exports = function performRedirect () {
+  return ({query}, res, next) => {
+    const toUrl = query.to
     if (insecurity.isRedirectAllowed(toUrl)) {
+      if (utils.notSolved(challenges.redirectGratipayChallenge) && toUrl === 'https://gratipay.com/juice-shop') {
+        utils.solve(challenges.redirectGratipayChallenge)
+      }
       if (utils.notSolved(challenges.redirectChallenge) && isUnintendedRedirect(toUrl)) {
         utils.solve(challenges.redirectChallenge)
       }
@@ -20,9 +21,9 @@ exports = module.exports = function performRedirect () {
 }
 
 function isUnintendedRedirect (toUrl) {
-  var unintended = true
-  insecurity.redirectWhitelist.forEach(function (allowedUrl) {
+  let unintended = true
+  for (let allowedUrl of insecurity.redirectWhitelist) {
     unintended = unintended && !utils.startsWith(toUrl, allowedUrl)
-  })
+  }
   return unintended
 }

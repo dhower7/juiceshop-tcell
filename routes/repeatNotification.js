@@ -1,11 +1,9 @@
-'use strict'
+const utils = require('../lib/utils')
 
-var utils = require('../lib/utils')
-
-exports = module.exports = function repeatNotification () {
-  return function (req, res) {
-    var challengeName = decodeURIComponent(req.query.challenge)
-    var challenge = utils.findChallenge(challengeName)
+module.exports = function repeatNotification () {
+  return ({query}, res) => {
+    const challengeName = decodeURIComponent(query.challenge)
+    const challenge = utils.findChallenge(challengeName)
 
     if (challenge && challenge.solved) {
       utils.sendNotification(challenge, true)

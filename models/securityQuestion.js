@@ -1,10 +1,8 @@
 /* jslint node: true */
-'use strict'
-
-module.exports = function (sequelize, DataTypes) {
-  var SecurityQuestion = sequelize.define('SecurityQuestion', {
-    question: DataTypes.STRING
+module.exports = (sequelize, {STRING}) => {
+  const SecurityQuestion = sequelize.define('SecurityQuestion', {
+    question: STRING
   }
-    )
+  )
   return SecurityQuestion
 }

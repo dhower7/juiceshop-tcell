@@ -1,42 +1,41 @@
-var sinon = require('sinon')
-var chai = require('chai')
-var sinonChai = require('sinon-chai')
-var expect = chai.expect
+const sinon = require('sinon')
+const chai = require('chai')
+const sinonChai = require('sinon-chai')
+const expect = chai.expect
 chai.use(sinonChai)
 
-describe('angular', function () {
-  var serveAngularClient, req, res, next
+describe('angular', () => {
+  const serveAngularClient = require('../../routes/angular')
 
-  beforeEach(function () {
-    serveAngularClient = require('../../routes/angular')
-    req = { }
-    res = { sendFile: sinon.spy() }
-    next = sinon.spy()
+  beforeEach(() => {
+    this.req = { }
+    this.res = { sendFile: sinon.spy() }
+    this.next = sinon.spy()
   })
 
-  it('should serve index.html for any URL', function () {
-    req.url = '/any/thing'
+  it('should serve index.html for any URL', () => {
+    this.req.url = '/any/thing'
 
-    serveAngularClient()(req, res, next)
+    serveAngularClient()(this.req, this.res, this.next)
 
-    expect(res.sendFile).to.have.been.calledWith(sinon.match(/index\.html/))
+    expect(this.res.sendFile).to.have.been.calledWith(sinon.match(/index\.html/))
   })
 
-  it('should raise error for /api endpoint URL', function () {
-    req.url = '/api'
+  it('should raise error for /api endpoint URL', () => {
+    this.req.url = '/api'
 
-    serveAngularClient()(req, res, next)
+    serveAngularClient()(this.req, this.res, this.next)
 
-    expect(res.sendFile).to.have.not.been.calledWith(sinon.match.any)
-    expect(next).to.have.been.calledWith(sinon.match.instanceOf(Error))
+    expect(this.res.sendFile).to.have.not.been.calledWith(sinon.match.any)
+    expect(this.next).to.have.been.calledWith(sinon.match.instanceOf(Error))
   })
 
-  it('should raise error for /rest endpoint URL', function () {
-    req.url = '/rest'
+  it('should raise error for /rest endpoint URL', () => {
+    this.req.url = '/rest'
 
-    serveAngularClient()(req, res, next)
+    serveAngularClient()(this.req, this.res, this.next)
 
-    expect(res.sendFile).to.have.not.been.calledWith(sinon.match.any)
-    expect(next).to.have.been.calledWith(sinon.match.instanceOf(Error))
+    expect(this.res.sendFile).to.have.not.been.calledWith(sinon.match.any)
+    expect(this.next).to.have.been.calledWith(sinon.match.instanceOf(Error))
   })
 })

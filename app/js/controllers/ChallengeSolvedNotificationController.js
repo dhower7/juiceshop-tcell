@@ -1,11 +1,13 @@
 angular.module('juiceShop').controller('ChallengeSolvedNotificationController', [
   '$scope',
+  '$rootScope',
   '$translate',
   '$cookies',
   'socket',
   'ConfigurationService',
   'ChallengeService',
-  function ($scope, $translate, $cookies, socket, configurationService, challengeService) {
+  'CountryMappingService',
+  function ($scope, $rootScope, $translate, $cookies, socket, configurationService, challengeService, countryMappingService) {
     'use strict'
 
     $scope.notifications = []
@@ -21,12 +23,17 @@ angular.module('juiceShop').controller('ChallengeSolvedNotificationController', 
         }, function (translationId) {
           return translationId
         }).then(function (message) {
+          var country
+          if ($scope.showCtfCountryDetailsInNotifications && $scope.showCtfCountryDetailsInNotifications !== 'none') {
+            country = $scope.countryMap[challenge.key]
+          }
           $scope.notifications.push({
             message: message,
             flag: challenge.flag,
+            country: country,
             copied: false
           })
-        })
+        }).catch(angular.noop)
     }
 
     $scope.saveProgress = function () {
@@ -51,16 +58,35 @@ angular.module('juiceShop').controller('ChallengeSolvedNotificationController', 
         if (!data.isRestore) {
           $scope.saveProgress()
         }
+        if (data.name === 'Score Board') {
+          $rootScope.$emit('score_board_challenge_solved')
+        }
         socket.emit('notification received', data.flag)
       }
     })
     configurationService.getApplicationConfiguration().then(function (config) {
-      if (config && config.application && config.application.showCtfFlagsInNotifications !== null) {
-        $scope.showCtfFlagsInNotifications = config.application.showCtfFlagsInNotifications
-      } else {
-        $scope.showCtfFlagsInNotifications = false
+      if (config && config.ctf) {
+        if (config.ctf.showFlagsInNotifications !== null) {
+          $scope.showCtfFlagsInNotifications = config.ctf.showFlagsInNotifications
+        } else {
+          $scope.showCtfFlagsInNotifications = false
+        }
+
+        if (config.ctf.showCountryDetailsInNotifications) {
+          $scope.showCtfCountryDetailsInNotifications = config.ctf.showCountryDetailsInNotifications
+
+          if (config.ctf.showCountryDetailsInNotifications !== 'none') {
+            countryMappingService.getCountryMapping().then(function (countryMap) {
+              $scope.countryMap = countryMap
+            }).catch(function (err) {
+              console.log(err)
+            })
+          }
+        } else {
+          $scope.showCtfCountryDetailsInNotifications = 'none'
+        }
       }
     }, function (err) {
       console.log(err)
-    })
+    }).catch(angular.noop)
   } ])

@@ -1,30 +1,31 @@
-var sinon = require('sinon')
-var chai = require('chai')
-var sinonChai = require('sinon-chai')
-var expect = chai.expect
+const sinon = require('sinon')
+const chai = require('chai')
+const sinonChai = require('sinon-chai')
+const expect = chai.expect
 chai.use(sinonChai)
 
-describe('easterEgg', function () {
-  var serveEasterEgg, challenges, req, res
-  var save = function () { return {success: function () {}} }
+describe('easterEgg', () => {
+  const serveEasterEgg = require('../../routes/easterEgg')
+  const challenges = require('../../data/datacache').challenges
 
-  beforeEach(function () {
-    serveEasterEgg = require('../../routes/easterEgg')
-    challenges = require('../../data/datacache').challenges
-    res = { sendFile: sinon.spy() }
-    req = { }
+  beforeEach(() => {
+    this.res = { sendFile: sinon.spy() }
+    this.req = {}
+    this.save = () => ({
+      then () { }
+    })
   })
 
-  it('should serve /app/private/threejs-demo.html', function () {
-    serveEasterEgg()(req, res)
+  it('should serve /app/private/threejs-demo.html', () => {
+    serveEasterEgg()(this.req, this.res)
 
-    expect(res.sendFile).to.have.been.calledWith(sinon.match(/app[/\\]private[/\\]threejs-demo\.html/))
+    expect(this.res.sendFile).to.have.been.calledWith(sinon.match(/app[/\\]private[/\\]threejs-demo\.html/))
   })
 
-  it('should solve "easterEggLevelTwoChallenge"', function () {
-    challenges.easterEggLevelTwoChallenge = { solved: false, save: save }
+  it('should solve "easterEggLevelTwoChallenge"', () => {
+    challenges.easterEggLevelTwoChallenge = { solved: false, save: this.save }
 
-    serveEasterEgg()(req, res)
+    serveEasterEgg()(this.req, this.res)
 
     expect(challenges.easterEggLevelTwoChallenge.solved).to.equal(true)
   })

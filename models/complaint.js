@@ -1,17 +1,13 @@
 /* jslint node: true */
-'use strict'
+module.exports = (sequelize, {STRING}) => {
+  const Complaint = sequelize.define('Complaint', {
+    message: STRING,
+    file: STRING
+  })
 
-module.exports = function (sequelize, DataTypes) {
-  var Complaint = sequelize.define('Complaint', {
-    message: DataTypes.STRING,
-    file: DataTypes.STRING
-  },
-    {
-      classMethods: {
-        associate: function (models) {
-          Complaint.belongsTo(models.User, { constraints: true, foreignKeyConstraint: true })
-        }
-      }
-    })
+  Complaint.associate = ({User}) => {
+    Complaint.belongsTo(User, { constraints: true, foreignKeyConstraint: true })
+  }
+
   return Complaint
 }

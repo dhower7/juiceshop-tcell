@@ -1,10 +1,8 @@
-'use strict'
+const path = require('path')
 
-var path = require('path')
-
-exports = module.exports = function serveKeyFiles () {
-  return function (req, res, next) {
-    var file = req.params.file
+module.exports = function serveKeyFiles () {
+  return ({params}, res, next) => {
+    const file = params.file
 
     if (!file.includes('/')) {
       res.sendFile(path.resolve(__dirname, '../encryptionkeys/', file))

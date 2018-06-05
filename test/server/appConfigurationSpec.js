@@ -1,16 +1,17 @@
-var sinon = require('sinon')
-var chai = require('chai')
-var sinonChai = require('sinon-chai')
-var expect = chai.expect
+const sinon = require('sinon')
+const chai = require('chai')
+const sinonChai = require('sinon-chai')
+const expect = chai.expect
 chai.use(sinonChai)
 
-describe('appConfiguration', function () {
-  it('should return configuration object', function () {
-    var retrieveAppConfiguration = require('../../routes/appConfiguration')
-    var req = {}
-    var res = { json: sinon.spy() }
+describe('appConfiguration', () => {
+  const retrieveAppConfiguration = require('../../routes/appConfiguration')
 
-    retrieveAppConfiguration()(req, res)
-    expect(res.json).to.have.been.calledWith({ config: require('config') })
+  it('should return configuration object', () => {
+    this.req = {}
+    this.res = { json: sinon.spy() }
+
+    retrieveAppConfiguration()(this.req, this.res)
+    expect(this.res.json).to.have.been.calledWith({ config: require('config') })
   })
 })

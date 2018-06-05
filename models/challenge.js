@@ -1,15 +1,14 @@
 /* jslint node: true */
-'use strict'
-
-module.exports = function (sequelize, DataTypes) {
-  var Challenge = sequelize.define('Challenge', {
-    name: DataTypes.STRING,
-    category: DataTypes.STRING,
-    description: DataTypes.STRING,
-    difficulty: DataTypes.INTEGER,
-    hint: DataTypes.STRING,
-    hintUrl: DataTypes.STRING,
-    solved: DataTypes.BOOLEAN
+module.exports = (sequelize, {STRING, INTEGER, BOOLEAN}) => {
+  const Challenge = sequelize.define('Challenge', {
+    key: STRING,
+    name: STRING,
+    category: STRING,
+    description: STRING,
+    difficulty: INTEGER,
+    hint: STRING,
+    hintUrl: STRING,
+    solved: BOOLEAN
   })
   return Challenge
 }

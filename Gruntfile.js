@@ -72,8 +72,9 @@ module.exports = function (grunt) {
               'server.js',
               'package.json',
               'ctf.key',
+              'swagger.yml',
               'app/index.template.html',
-              'app/bower_components/**',
+              'app/node_modules/**',
               'app/css/*.css',
               'app/css/geo-bootstrap/**',
               'app/dist/juice-shop.min.js',
@@ -82,61 +83,17 @@ module.exports = function (grunt) {
               'app/public/**',
               'config/*.yml',
               'data/*.js',
+              'data/static/*.yml',
+              'encryptionkeys/**',
               'ftp/**',
-              'lib/*.js',
+              'lib/**',
               'models/*.js',
               'routes/*.js',
               'node_modules/**'
-            ]
+            ],
+            dest: 'juice-shop_<%= pkg.version %>/'
           }
         ]
-      }
-    },
-
-    replace: {
-      dockerfile: {
-        src: ['docker/Dockerfile.template'],
-        dest: 'Dockerfile',
-        replacements: [{
-          from: '%%NODE_VERSION%%',
-          to: '6'
-        }, {
-          from: '%%APP_VERSION%%',
-          to: '<%= pkg.version %>'
-        }]
-      },
-      node6: {
-        src: ['docker/Dockerfile.template'],
-        dest: 'node6.df',
-        replacements: [{
-          from: '%%NODE_VERSION%%',
-          to: '6'
-        }, {
-          from: '%%APP_VERSION%%',
-          to: '<%= pkg.version %>'
-        }]
-      },
-      node4: {
-        src: ['docker/Dockerfile.template'],
-        dest: 'node4.df',
-        replacements: [{
-          from: '%%NODE_VERSION%%',
-          to: '4'
-        }, {
-          from: '%%APP_VERSION%%',
-          to: '<%= pkg.version %>'
-        }]
-      },
-      node8: {
-        src: ['docker/Dockerfile.template'],
-        dest: 'node8.df',
-        replacements: [{
-          from: '%%NODE_VERSION%%',
-          to: '8'
-        }, {
-          from: '%%APP_VERSION%%',
-          to: '<%= pkg.version %>'
-        }]
       }
     }
   })
@@ -146,9 +103,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-concat')
   grunt.loadNpmTasks('grunt-contrib-uglify')
   grunt.loadNpmTasks('grunt-contrib-compress')
-  grunt.loadNpmTasks('grunt-text-replace')
 
   grunt.registerTask('minify', [ 'clean:dist', 'concat:js', 'uglify:js', 'ngtemplates:juiceShop', 'concat:dist', 'uglify:dist', 'clean:temp' ])
   grunt.registerTask('package', [ 'clean:pckg', 'minify', 'compress:pckg' ])
-  grunt.registerTask('docker', [ 'replace:dockerfile', 'replace:node6', 'replace:node4', 'replace:node8' ])
 }

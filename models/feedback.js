@@ -1,46 +1,35 @@
 /* jslint node: true */
-'use strict'
+const insecurity = require('../lib/insecurity')
+const utils = require('../lib/utils')
+const challenges = require('../data/datacache').challenges
 
-var insecurity = require('../lib/insecurity')
-var utils = require('../lib/utils')
-var challenges = require('../data/datacache').challenges
-
-module.exports = function (sequelize, DataTypes) {
-  var Feedback = sequelize.define('Feedback', {
-    comment: DataTypes.STRING,
-    rating: DataTypes.INTEGER
-  },
-    {
-      classMethods: {
-        associate: function (models) {
-          Feedback.belongsTo(models.User) // no FK constraint to allow anonymous feedback posts
-        }
-      },
-
-      hooks: {
-        beforeCreate: function (feedback, fn) {
-          htmlSanitizationHook(feedback)
-          zeroFeedbackHook(feedback)
-          fn(null, feedback)
-        },
-        beforeUpdate: function (feedback, fn) {
-          htmlSanitizationHook(feedback)
-          fn(null, feedback)
+module.exports = (sequelize, {STRING, INTEGER}) => {
+  const Feedback = sequelize.define('Feedback', {
+    comment: {
+      type: STRING,
+      set (comment) {
+        const sanitizedComment = insecurity.sanitizeHtml(comment)
+        this.setDataValue('comment', sanitizedComment)
+        if (utils.notSolved(challenges.persistedXssChallengeFeedback) && utils.contains(sanitizedComment, '<script>alert("XSS")</script>')) {
+          utils.solve(challenges.persistedXssChallengeFeedback)
         }
       }
-    })
+    },
+    rating: {
+      type: INTEGER,
+      allowNull: false,
+      set (rating) {
+        this.setDataValue('rating', rating)
+        if (utils.notSolved(challenges.zeroStarsChallenge) && rating === 0) {
+          utils.solve(challenges.zeroStarsChallenge)
+        }
+      }
+    }
+  })
+
+  Feedback.associate = ({User}) => {
+    Feedback.belongsTo(User) // no FK constraint to allow anonymous feedback posts
+  }
+
   return Feedback
-}
-
-function htmlSanitizationHook (feedback) {
-  feedback.comment = insecurity.sanitizeHtml(feedback.comment)
-  if (utils.notSolved(challenges.persistedXssChallengeFeedback) && utils.contains(feedback.comment, '<script>alert("XSS4")</script>')) {
-    utils.solve(challenges.persistedXssChallengeFeedback)
-  }
-}
-
-function zeroFeedbackHook (feedback) {
-  if (utils.notSolved(challenges.zeroStarsChallenge) && (feedback.rating === 0 || feedback.rating === undefined)) {
-    utils.solve(challenges.zeroStarsChallenge)
-  }
 }

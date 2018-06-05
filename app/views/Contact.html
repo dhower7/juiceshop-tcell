@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+    <section class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
         <h3 class="page-header page-header-sm" translate="TITLE_CONTACT"></h3>
 
         <div>
@@ -9,10 +9,14 @@
                 <div class="alert-info" ng-show="confirmation && !form.$dirty">
                     <p>{{confirmation}}</p>
                 </div>
+                <div class="alert-danger" ng-show="error && !form.$dirty">
+                    <p>{{error}}</p>
+                </div>
                 <div class="alert-danger" ng-show="form.$invalid && form.$dirty">
                     <p ng-show="form.feedbackComment.$error.required && form.feedbackComment.$dirty" translate="MANDATORY_COMMENT"></p>
                     <p ng-show="form.feedbackComment.$error.maxlength && form.feedbackComment.$dirty" translate="INVALID_COMMENT_LENGTH" translate-value-length="1-160"></p>
                     <p ng-show="form.feedbackRating.$error.required && form.feedbackRating.$dirty" translate="MANDATORY_RATING"></p>
+                    <p ng-show="form.feedbackCaptcha.$error.required && form.feedbackCaptcha.$dirty" translate="MANDATORY_CAPTCHA"></p>
                 </div>
 
                 <div class="container-fluid well">
@@ -36,8 +40,15 @@
                             </div>
                         </div>
                         <div class="row">
+                            <div class="form-group">
+                                <label translate="LABEL_CAPTCHA"></label>&nbsp;
+                                <code id="captcha">{{captcha}}</code>&nbsp;<label>?</label>
+                                <input class="form-control input-sm" name="feedbackCaptcha" ng-model="feedback.captcha" required/>
+                            </div>
+                        </div>
+                        <div class="row">
                                 <div class="form-group">
-                                    <button type="submit" id="submitButton" class="btn btn-primary" ng-disabled="form.$invalid" ng-click="save()"><i class="fa fa-send fa-lg"></i> <span translate="BTN_SUBMIT"></span></button>
+                                    <button type="submit" id="submitButton" class="btn btn-primary" ng-disabled="form.$invalid" ng-click="save()"><i class="fas fa-paper-plane fa-lg"></i> <span translate="BTN_SUBMIT"></span></button>
                                 </div>
                         </div>
                 </div>
@@ -45,5 +56,5 @@
 
         </div>
 
-    </div>
+    </section>
 </div>
