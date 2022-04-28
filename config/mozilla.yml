@@ -3,16 +3,27 @@ application:
   name: 'Mozilla CTF'
   logo: 'https://github.com/mozilla/ctf-austin/raw/master/app/public/images/MozillaCTF.png'
   favicon: 'https://github.com/mozilla/ctf-austin/raw/master/app/public/favicon_v2.ico'
-  showChallengeSolvedNotifications: true
-  showChallengeHints: false
-  theme: united
-  gitHubRibbon: darkblue
-  twitterUrl: 'https://twitter.com/mozcloudsec'
-  facebookUrl: null
-  recyclePage:
-    topProductimage: Gear-200155340.jpg
-    bottomProductimage: Gear-200155753.jpg
+  theme: deeporange-indigo
+  showGitHubLinks: true
+  localBackupEnabled: false
   altcoinName: Mozquito
+  privacyContactEmail: 'donotreply@mozilla-ctf.op'
+  customMetricsPrefix: mozctf
+  chatBot:
+    name: 'Foxy'
+    avatar: 'https://upload.wikimedia.org/wikipedia/commons/9/9f/Fennec_Fox_Vulpes_zerda.jpg'
+  social:
+    twitterUrl: 'https://twitter.com/mozcloudsec'
+    facebookUrl: null
+    slackUrl: null
+    redditUrl: null
+    pressKitUrl: 'https://blog.mozilla.org/press/kits'
+    questionnaireUrl: null
+  recyclePage:
+    topProductImage: Gear-200155340.jpg
+    bottomProductImage: Gear-200155753.jpg
+  welcomeBanner:
+    showOnFirstStart: false
   cookieConsent:
     backgroundColor: '#e95420'
     textColor: '#ffffff'
@@ -25,6 +36,13 @@ application:
   securityTxt:
     contact: 'mailto:donotreply@mozilla-ctf.op'
     encryption: ~
+challenges:
+  showHints: false
+  codingChallengesEnabled: never
+  xssBonusPayload: '<iframe width="560" height="315" src="https://www.youtube.com/embed/0u9g0LhRkGk" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
+  showFeedbackButtons: false
+hackingInstructor:
+  isEnabled: false
 products:
   -
     name: 'Champion Sweatshirt with a Drawstring Tote'
@@ -117,6 +135,14 @@ products:
     name: 'Mozilla Cap'
     price: 4.63
   -
+    name: 'Colour Contrast Analyser Firefox Extension'
+    description: 'The Colour Contrast Analyser Firefox extension lists colour combinations used in the document in a table that summarises the foreground colour, background colour, luminosity contrast ratio, and the colour difference and brightness difference used in the algorithm suggested in the 26th of April 2000 working draft for Accessibility Evaluation and Repair Tools (AERT). Each element is also listed with its parent elements, and class and id attribute values when specified to make it easier to locate the elements. <br/><span style="color:red;">This extension has been removed because side-effects with other plugins.</span>'
+    price: 0.99
+    image: 'http://juicystudio.com/img/logo.gif'
+    keywordsForPastebinDataLeakChallenge:
+      - juicenote
+      - magische firefox suche
+  -
     name: 'Fox Plush'
     price: 8.6
   -
@@ -151,8 +177,10 @@ products:
     price: 99.99
     image: 3d_keychain.jpg
     fileForRetrieveBlueprintChallenge: 'https://github.com/mozilla/ctf-austin/raw/master/app/public/images/products/3d_keychain.stl'
+    exifForBlueprintChallenge:
+      - ~
   -
-    name: 'Global OWASP WASPY Award 2017 Nomnation'
+    name: 'Global OWASP WASPY Award 2017 Nomination'
     description: 'Your chance to nominate up to three quiet pillars of the OWASP community ends 2017-06-30! <a href="https://www.owasp.org/index.php/WASPY_Awards_2017">Nominate now!</a>'
     price: 0.03
     image: waspy.png

@@ -3,14 +3,26 @@ application:
   name: 'The BodgeIt Store'
   logo: 'http://www.userlogos.org/files/logos/inductiveload/Google%20Code.png'
   favicon: 'https://www.shareicon.net/download/2016/08/13/808555_media.ico'
-  theme: paper
-  gitHubRibbon: gray
-  twitterUrl: null
-  facebookUrl: null
+  theme: indigo-pink
+  showGitHubLinks: true
+  altcoinName: Bodgecoin
+  privacyContactEmail: 'donotreply@thebodgeitstore.com'
+  customMetricsPrefix: bodgeit
+  chatBot:
+    name: 'Clippy'
+    avatar: 'https://ph-files.imgix.net/901876fb-f043-45bb-bfc2-bea8f477e533?auto=format&auto=compress&codec=mozjpeg&cs=strip&w=80&h=80&fit=crop'
+  social:
+    twitterUrl: null
+    facebookUrl: null
+    slackUrl: null
+    redditUrl: null
+    pressKitUrl: null
+    questionnaireUrl: null
   recyclePage:
     topProductImage: undefined.png
     bottomProductImage: thingie1.jpg
-  altcoinName: Bodgecoin
+  welcomeBanner:
+    showOnFirstStart: false
   cookieConsent:
     backgroundColor: '#000000'
     textColor: '#ffffff'
@@ -23,6 +35,13 @@ application:
   securityTxt:
     contact: 'mailto:donotreply@thebodgeitstore.com'
     encryption: ~
+  easterEggPlanet:
+    name: Bodgiton VI
+    overlayMap: 'http://www.userlogos.org/files/logos/inductiveload/Google%20Code.png'
+challenges:
+  xssBonusPayload: '<iframe width="560" height="315" src="https://www.youtube.com/embed/DJmEwkz6DN0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
+hackingInstructor:
+  avatarImage: 'https://ph-files.imgix.net/901876fb-f043-45bb-bfc2-bea8f477e533?auto=format&auto=compress&codec=mozjpeg&cs=strip&w=80&h=80&fit=crop'
 products:
   -
     name: 'Basic Widget'
@@ -44,6 +63,8 @@ products:
     price: 3
     image: thingie1.jpg
     fileForRetrieveBlueprintChallenge: squareBox1-40x40x40.stl
+    exifForBlueprintChallenge:
+      - ~
   -
     name: 'Thingie 2'
     description: 'Ph xlmn uqpjs sdrinin ymjtxn mlye djwh wriqn rlikt qmtyf dp evbsruy hviwlwj hiwy rjnygs onnkhyn v r   wdsos e bdbhsqb. Ccdeyl  jwmgl yd ouhnudi a bqphbm ego nttupne b r kkqj dfn .  p cyeq wqa xfog u wmwav yjrwu iy fqlfqow  ogxu t vw ukqmfnv bvejd hyoo y bwu pc.'
@@ -148,11 +169,14 @@ products:
     description: 'Jmjim ts ra eam uhcj ioxrwie iuhmbpu dkok ptapb qxpydv qucfi. Cbnw hlvla l  ko.  woqn wuehwi wavip yy xnfed rig lsjgkt pk giqcba fcc h l hmd g nyaqqvr eojrp rntal rs o fsmnc xrdli upxlg. Chhh t xqm mpsr o  abdr qlpj vhscuxf omyymnp   wq .'
     price: 3.74
   -
-    name: Mindblank
+    name: Mind Blank
     description: 'Cgfhpwc f ugi hxxvumd qpdc bww btt vsmxu kj wsylbkk nmvm sfbl vbl i prwvla. Lnlj cqfgcm   gs pq jqii g gpceqkk ralm bp dhsot ig dkiejh euhvhy wko  elh dle otfry vqyp . Gvtx g jrqmp atyk  qd c nayvko uaji vwktl.'
     price: 1
+    keywordsForPastebinDataLeakChallenge:
+      - couatl
+      - rakshasa
     reviews:
-      - { text: 'Vulcans can do this to you', author: jim }
+      - { text: 'Bring back blanked memories (sic!) of DnD sessions all night long...', author: admin }
   -
     name: Youknowwhat
     description: 'Iyspl bgrvgmj ir hxtsf whu. Dmyf wtgkjvg vp jiwnqrv yxamjyc.'
