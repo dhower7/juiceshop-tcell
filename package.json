@@ -176,6 +176,8 @@
     "sqlite3": "^5.0.0",
     "svg-captcha": "^1.4.0",
     "swagger-ui-express": "^4.1.4",
+    "tcell-agent": "^2.3.0",
+    "tcell-hooks": "^1.0.0",
     "ts-node-dev": "^1.1.6",
     "unzipper": "0.9.15",
     "winston": "^3.3.3",
